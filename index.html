@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balai Besar Guru Penggerak - Booking Lapangan Olahraga</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="bbgp.png" type="image/x-icon">
+</head>
+<body>
+  <header>
+    <div class="header-flex">
+      <img src="bbgp.png" alt="Logo BBGP" class="header-logo">
+      <div class="header-title-group">
+        <h1>Balai Besar Guru Penggerak</h1>
+        <p>Booking Lapangan Olahraga</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        BBPG Parung
+        <span id="admin-badge" style="display:none; margin-left:8px; background:#ef4444; color:#fff; font-size:0.8rem; padding:2px 8px; border-radius:6px;">ADMIN</span>
+      </div>
+      <div class="mobile-menu-btn" onclick="toggleMenu()">☰</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">Beranda</a></li>
+        <li><a href="#about">Tentang Kami</a></li>
+        <li><a href="#fields">Lapangan</a></li>
+        <li><a href="#schedule">Jadwal Booking</a></li>
+        <li><a href="#contact">Kontak</a></li>
+        <li id="login-nav"><a href="login.html">Login</a></li>
+        <li id="logout-nav" style="display:none;"><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home" class="container">
+    <div class="welcome">
+      <h2>Selamat Datang di BBGP Parung Jawa Barat</h2>
+      <p>Tempat lapangan olahraga terbaik di Parung dengan fasilitas lengkap!</p>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="container">
+    <h2 class="section-title">Tentang Kami</h2>
+    <div class="about-section">
+      <div class="about-container">
+        <div class="about-image">
+          <img src="4.jpg" alt="BGP Parung Facilities">
+        </div>
+        <div class="about-content">
+          <h3 class="about-title">Balai Guru Penggerak (BGP) Parung</h3>
+          <p>Balai Besar Guru Penggerak (BBGP) Parung merupakan pusat pelatihan dan pengembangan profesionalisme guru yang berada di wilayah Parung, Kabupaten Bogor, Jawa Barat. Dikelola langsung di bawah naungan Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi Republik Indonesia (Kemendikbudristek), BGP Parung berperan penting dalam mendukung peningkatan kompetensi pendidik melalui berbagai program pelatihan, workshop, serta pengembangan kapasitas guru dan tenaga kependidikan. Tidak hanya sebagai pusat pelatihan, BGP Parung juga dikenal memiliki fasilitas olahraga yang lengkap dan berkualitas tinggi. Fasilitas ini dibuka untuk masyarakat umum, sebagai bentuk komitmen BGP dalam mendukung gaya hidup sehat dan produktif, serta membangun interaksi positif antara institusi pendidikan dan masyarakat sekitar. Kami berkomitmen menyediakan fasilitas nyaman, aman, berkualitas tinggi.</p>
+          <h4 style="margin-top:1.5rem; color:#1e3a8a;">Fasilitas Kami:</h4>
+          <div class="facility-list">
+            <div class="facility-item"><span class="facility-icon">✓</span> Parkir Luas</div>
+            <div class="facility-item"><span class="facility-icon">✓</span> Kantin</div>
+            <div class="facility-item"><span class="facility-icon">✓</span> Toilet Bersih</div>
+            <div class="facility-item"><span class="facility-icon">✓</span> Ruang Ganti</div>
+            <div class="facility-item"><span class="facility-icon">✓</span> Wifi Gratis</div>
+            <div class="facility-item"><span class="facility-icon">✓</span> Petugas Keamanan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fields Section -->
+  <section id="fields" class="container">
+    <h2 class="section-title">Pilihan Lapangan</h2>
+    <div class="fields-container">
+      <div class="field-card">
+        <div class="field-image">
+          <img src="1.jpg" alt="Lapangan Voli">
+        </div>
+        <div class="field-info">
+          <h3 class="field-title">Lapangan Voli</h3>
+          <p class="field-desc">Permukaan premium dan fasilitas lengkap.</p>
+          <p><strong>Jam Operasional:</strong> 08.00 - 22.00</p>
+          <a href="#" class="book-btn" onclick="handleBookingClick('Lapangan Voli')">Pesan Sekarang</a>
+        </div>
+      </div>
+      <div class="field-card">
+        <div class="field-image">
+          <img src="3.jpg" alt="Lapangan Mini Soccer">
+        </div>
+        <div class="field-info">
+          <h3 class="field-title">Lapangan Mini Soccer</h3>
+          <p class="field-desc">Rumput sintetis berkualitas tinggi dengan pencahayaan baik.</p>
+          <p><strong>Jam Operasional:</strong> 08.00 - 23.00</p>
+          <a href="#" class="book-btn" onclick="handleBookingClick('Lapangan Mini Soccer')">Pesan Sekarang</a>
+        </div>
+      </div>
+      <div class="field-card">
+        <div class="field-image">
+          <img src="2.jpg" alt="Lapangan Tenis">
+        </div>
+        <div class="field-info">
+          <h3 class="field-title">Lapangan Tenis</h3>
+          <p class="field-desc">Permukaan hard court dan fasilitas pendukung.</p>
+          <p><strong>Jam Operasional:</strong> 06.00 - 21.00</p>
+          <a href="#" class="book-btn" onclick="handleBookingClick('Lapangan Tenis')">Pesan Sekarang</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Jadwal Booking Section -->
+  <section id="schedule" class="container">
+    <h2 class="section-title">Jadwal Pemesanan Booking</h2>
+    <div class="schedule-container">
+      <button onclick="openAvailabilityModal()" class="check-availability-btn">Cek Ketersediaan</button>
+      <table id="booking-table">
+        <thead>
+          <tr>
+            <th>Lapangan</th>
+            <th>Tanggal</th>
+            <th>Jam</th>
+            <th>Status</th>
+            <!-- Kolom aksi hanya untuk admin, diisi lewat JS -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data booking tampil di sini -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Modal Cek Ketersediaan -->
+  <div id="availability-modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeAvailabilityModal()">&times;</span>
+      <h2>Cek Ketersediaan</h2>
+      <form id="availability-form" onsubmit="checkAvailability(event)">
+        <div class="form-group">
+          <label for="availability-date">Tanggal</label>
+          <input type="date" id="availability-date" name="date" required>
+        </div>
+        <div class="form-group">
+          <label for="availability-field">Lapangan</label>
+          <select id="availability-field" name="field" required>
+            <option value="Lapangan Voli">Lapangan Voli</option>
+            <option value="Lapangan Mini Soccer">Lapangan Mini Soccer</option>
+            <option value="Lapangan Tenis">Lapangan Tenis</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Cek</button>
+      </form>
+      <div id="availability-result"></div>
+    </div>
+  </div>
+
+  <!-- Kontak Section -->
+  <section id="contact" class="container">
+    <h2 class="section-title">Hubungi Kami</h2>
+    <div class="contact-container">
+      <div class="contact-info">
+        <h3>Informasi Kontak</h3>
+        <div class="contact-detail"><div class="contact-icon">📍</div>Jl. Raya Parung No.420, Pemagarsari, Kec. Parung, Kabupaten Bogor, Jawa Barat 16330</div>
+        <div class="contact-detail"><div class="contact-icon">📞</div>+62 812-3456-7890</div>
+        <div class="contact-detail"><div class="contact-icon">✉️</div>info@bbpgparung.ac.id</div>
+        <div class="contact-detail"><div class="contact-icon">⏰</div>Senin - Sabtu: 08.00 - 16.00</div>
+      </div>
+      <div class="map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2803.401172008358!2d106.73293629344823!3d-6.444356506284756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69e95c953c1021%3A0x843cda8050a9ace!2sBBGP%20JAWA%20BARAT!5e0!3m2!1sid!2sid!4v1745777566335!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Booking -->
+  <div id="booking-modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeBookingModal()">&times;</span>
+      <h2 id="modal-title">Pesan Lapangan</h2>
+      <form id="booking-form" onsubmit="submitBooking(event)">
+        <input type="hidden" id="field-type" name="fieldType">
+        <div class="form-group">
+          <label for="booking-date">Tanggal</label>
+          <input type="date" id="booking-date" name="date" required>
+        </div>
+        <div class="form-group">
+          <label for="booking-time">Jam</label>
+          <select id="booking-time" name="time" required>
+            <option value="">Pilih Jam</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="booking-duration">Durasi (jam)</label>
+          <select id="booking-duration" name="duration" required>
+            <option value="">Pilih Durasi</option>
+            <option value="1">1 Jam</option>
+            <option value="2">2 Jam</option>
+            <option value="3">3 Jam</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Pesan Sekarang</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Balai Guru Penggerak - Booking Lapangan Olahraga</p>
+    <p>Hubungi kami: info@bpgparung.ac.id | +62 882-2388-1917</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="main.js"></script>
+</body>
+</html>

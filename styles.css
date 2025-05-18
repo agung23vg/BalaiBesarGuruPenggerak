@@ -1,0 +1,587 @@
+/* Reset dan Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+}
+
+/* Header */
+header {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 1rem 0;
+}
+
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header-logo {
+  height: 60px;
+  width: auto;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: block;
+}
+
+.header-title-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.header-title-group h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.header-title-group p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #e0e7ef;
+  font-weight: 400;
+}
+
+/* Responsive header */
+@media (max-width: 600px) {
+  .header-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .header-title-group h1 {
+    font-size: 1.2rem;
+  }
+  .header-logo {
+    height: 40px;
+  }
+}
+
+/* Navbar */
+.navbar {
+  background-color: #2563eb;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: white;
+  padding: 1rem 0;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.2rem;
+  border-radius: 4px;
+  display: block;
+  transition: background 0.2s, color 0.2s;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+.mobile-menu-btn {
+  display: none;
+  cursor: pointer;
+  color: white;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  margin-left: 1rem;
+}
+
+/* Responsive Navbar */
+@media (max-width: 900px) {
+  .nav-container {
+    padding: 0 0.5rem;
+  }
+  .logo {
+    font-size: 1rem;
+  }
+  .nav-links a {
+    font-size: 0.98rem;
+    padding: 0.7rem 0.8rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0.5rem;
+  }
+  .mobile-menu-btn {
+    display: block;
+    position: absolute;
+    right: 1rem;
+    top: 0.4rem;
+    z-index: 101;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: #2563eb;
+    margin-top: 0.5rem;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links li {
+    width: 100%;
+    text-align: left;
+  }
+  .nav-links a {
+    padding: 0.9rem 1.2rem;
+    border-radius: 0;
+    border-bottom: 1px solid #1e3a8a;
+  }
+  .nav-links li:last-child a {
+    border-bottom: none;
+  }
+}
+
+/* Content Containers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.welcome {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* About Section */
+.about-section {
+  background-color: rgb(249, 249, 249);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+
+.about-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.about-image {
+  flex: 1;
+  min-width: 300px;
+  overflow: hidden;
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-content {
+  flex: 2;
+  min-width: 300px;
+  padding: 2rem;
+}
+
+.about-title {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+}
+
+.facility-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.facility-item {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.facility-icon {
+  margin-right: 0.5rem;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+/* Fields */
+.fields-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.field-card {
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  width: 320px;
+  transition: transform 0.3s;
+}
+
+.field-card:hover {
+  transform: translateY(-5px);
+}
+
+.field-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+.field-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.field-info {
+  padding: 1.5rem;
+}
+
+.field-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #1e3a8a;
+}
+
+.field-desc {
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.book-btn {
+  display: inline-block;
+  background-color: #05aff8;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.book-btn:hover {
+  background-color: #05aff8;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1e3a8a;
+}
+
+/* Booking Modal */
+#booking-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.submit-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #05aff8;
+}
+
+/* Schedule */
+.schedule-container {
+  background-color: #ffe4e6;
+  border-radius: 12px;
+  padding: 1.2rem 0.8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #076ef5;
+}
+
+th {
+  background-color: #f1f5f9;
+  color: #1e3a8a;
+}
+
+.cancel-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Jadwal Booking Responsive di HP */
+@media (max-width: 700px) {
+  .schedule-container {
+    padding: 1rem 0.2rem;
+    overflow-x: auto;
+  }
+  .schedule-container table {
+    display: block;
+    width: 100%;
+    min-width: 400px;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.97rem;
+  }
+  .schedule-container th, .schedule-container td {
+    padding: 0.6rem 0.4rem;
+  }
+}
+
+/* Contact */
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 300px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.contact-info h3 {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+}
+
+.contact-detail {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.contact-icon {
+  margin-right: 1rem;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.map {
+  flex: 2;
+  min-width: 300px;
+  height: 300px;
+  background-color: #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Footer */
+footer {
+  background-color: #05aff8;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 3rem;
+}
+
+/* Modal Cek Ketersediaan */
+#availability-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 24px 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  z-index: 1000;
+  width: 95vw;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+#availability-modal .modal-content {
+  position: relative;
+}
+
+#availability-modal .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.check-availability-btn {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Tabel hasil cek ketersediaan agar tidak melebar dan bisa di-scroll jika tinggi */
+#availability-result {
+  max-height: 55vh;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
+#availability-result table {
+  width: 100%;
+  font-size: 0.98rem;
+}
+
+#availability-result th, #availability-result td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+}
+
+@media (max-width: 500px) {
+  #availability-modal {
+    max-width: 98vw;
+    padding: 10px 2px;
+  }
+  #availability-result th, #availability-result td {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.93rem;
+  }
+}
+
+/* Admin mode: warna navbar berbeda */
+body.admin .navbar {
+  background: #ef4444 !important;
+}

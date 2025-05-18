@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lengkapi Profil</title>
+  <link rel="stylesheet" href="lengkapi-profil.css">
+</head>
+<body>
+  <h2>Lengkapi Profil Anda</h2>
+  <form id="profil-form">
+    <input type="text" id="nama" placeholder="Nama Lengkap" required><br>
+    <input type="text" id="kelas" placeholder="Kelas" required><br>
+    <input type="text" id="no_hp" placeholder="No HP" required><br>
+    <input type="text" id="nama_sekolah" placeholder="Nama Sekolah" required><br>
+    <button type="submit">Simpan Profil</button>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = 'https://eiqkjwjbpbhjieijtjad.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    document.getElementById('profil-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value;
+      const kelas = document.getElementById('kelas').value;
+      const no_hp = document.getElementById('no_hp').value;
+      const nama_sekolah = document.getElementById('nama_sekolah').value;
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert('Anda harus login!');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Insert ke tabel profiles
+      const { error } = await supabase.from('profiles').insert([{
+        id: user.id,
+        nama,
+        kelas,
+        no_hp,
+        nama_sekolah
+      }]);
+      if (error) {
+        alert('Gagal menyimpan profil: ' + error.message);
+      } else {
+        alert('Profil berhasil disimpan!');
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
