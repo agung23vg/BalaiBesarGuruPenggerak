@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Admin - BBGP Parung</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="bbgp.png" type="image/x-icon">
+  <style>
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+    .admin-table th, .admin-table td { border: 1px solid #ccc; padding: 8px; }
+    .admin-table th { background: #f3f4f6; }
+    .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+      padding: 4px 10px; margin: 0 2px; border: none; border-radius: 4px; cursor: pointer;
+    }
+    .edit-btn { background: #2563eb; color: #fff; }
+    .delete-btn { background: #dc2626; color: #fff; }
+    .save-btn { background: #059669; color: #fff; }
+    .cancel-btn { background: #6b7280; color: #fff; }
+    .admin-header { margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-flex">
+      <img src="bbgp.png" alt="Logo BBGP" class="header-logo">
+      <div class="header-title-group">
+        <h1>Dashboard Admin BBGP Parung</h1>
+        <p>Kelola Data Booking Lapangan</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-header">
+    <button onclick="logout()" style="float:right;">Logout</button>
+    <h2>Daftar Booking Lapangan</h2>
+  </div>
+
+  <div id="admin-booking-container">
+    <table class="admin-table" id="admin-booking-table">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Lapangan</th>
+          <th>Tanggal</th>
+          <th>Jam</th>
+          <th>Durasi</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data booking tampil di sini -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Konfigurasi Supabase
+    const supabaseUrl = 'https://eiqkjwjbpbhjieijtjad.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let bookings = [];
+    let editingId = null;
+
+    // Ambil data booking
+    async function fetchAdminBookings() {
+      const { data, error } = await supabase
+        .from('booking')
+        .select('*')
+        .order('date', { ascending: true });
+      if (error) {
+        alert('Gagal mengambil data booking');
+        return;
+      }
+      bookings = data || [];
+      renderAdminBookings();
+    }
+
+    // Render tabel booking
+    function renderAdminBookings() {
+      const tbody = document.querySelector('#admin-booking-table tbody');
+      tbody.innerHTML = '';
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data booking</td></tr>';
+        return;
+      }
+      bookings.forEach(booking => {
+        if (editingId === booking.id) {
+          // Mode edit
+          tbody.innerHTML += `
+            <tr>
+              <td><input type="text" id="edit-nama" value="${booking.nama || ''}"></td>
+              <td><input type="text" id="edit-field" value="${booking.field || ''}"></td>
+              <td><input type="date" id="edit-date" value="${booking.date || ''}"></td>
+              <td><input type="text" id="edit-time" value="${booking.time || ''}"></td>
+              <td><input type="number" id="edit-duration" value="${booking.duration || 1}" min="1" max="12"></td>
+              <td>
+                <select id="edit-status">
+                  <option value="Menunggu Konfirmasi" ${booking.status === 'Menunggu Konfirmasi' ? 'selected' : ''}>Menunggu Konfirmasi</option>
+                  <option value="Dikonfirmasi" ${booking.status === 'Dikonfirmasi' ? 'selected' : ''}>Dikonfirmasi</option>
+                  <option value="Selesai" ${booking.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                  <option value="Dibatalkan" ${booking.status === 'Dibatalkan' ? 'selected' : ''}>Dibatalkan</option>
+                </select>
+              </td>
+              <td>
+                <button class="save-btn" onclick="saveEdit(${booking.id})">Simpan</button>
+                <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML += `
+            <tr>
+              <td>${booking.nama || ''}</td>
+              <td>${booking.field || ''}</td>
+              <td>${booking.date || ''}</td>
+              <td>${booking.time || ''}</td>
+              <td>${booking.duration || ''} jam</td>
+              <td>${booking.status || ''}</td>
+              <td>
+                <button class="edit-btn" onclick="editBooking(${booking.id})">Edit</button>
+                <button class="delete-btn" onclick="deleteBooking(${booking.id})">Hapus</button>
+              </td>
+            </tr>
+          `;
+        }
+      });
+    }
+
+    // Edit booking
+    window.editBooking = function(id) {
+      editingId = id;
+      renderAdminBookings();
+    };
+
+    // Batal edit
+    window.cancelEdit = function() {
+      editingId = null;
+      renderAdminBookings();
+    };
+
+    // Simpan edit booking
+    window.saveEdit = async function(id) {
+      const nama = document.getElementById('edit-nama').value;
+      const field = document.getElementById('edit-field').value;
+      const date = document.getElementById('edit-date').value;
+      const time = document.getElementById('edit-time').value;
+      const duration = parseInt(document.getElementById('edit-duration').value);
+      const status = document.getElementById('edit-status').value;
+
+      const { error } = await supabase
+        .from('booking')
+        .update({ nama, field, date, time, duration, status })
+        .eq('id', id);
+
+      if (error) {
+        alert('Gagal mengupdate data booking');
+        return;
+      }
+      editingId = null;
+      await fetchAdminBookings();
+    };
+
+    // Hapus booking
+    window.deleteBooking = async function(id) {
+      if (!confirm('Yakin ingin menghapus booking ini?')) return;
+      const { error } = await supabase
+        .from('booking')
+        .delete()
+        .eq('id', id);
+      if (error) {
+        alert('Gagal menghapus booking');
+        return;
+      }
+      await fetchAdminBookings();
+    };
+
+    // Logout
+    window.logout = async function() {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    };
+
+    // Cek login admin
+    async function checkAdmin() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || user.email !== "bbgpparung@gmail.com") {
+        alert('Anda bukan admin!');
+        window.location.href = 'login.html';
+        return;
+      }
+    }
+
+    // On load
+    window.onload = async function() {
+      await checkAdmin();
+      await fetchAdminBookings();
+    };
+  </script>
+</body>
+</html>
