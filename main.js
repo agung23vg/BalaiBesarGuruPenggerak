@@ -34,6 +34,11 @@ async function checkUserRole() {
     if (user.email === ADMIN_EMAIL) {
       document.body.classList.add('admin');
       if (adminBadge) adminBadge.style.display = 'inline-block';
+      // Redirect admin ke admin.html jika belum di halaman itu
+      if (!window.location.pathname.endsWith('admin.html')) {
+        window.location.href = 'admin.html';
+        return; // Stop eksekusi agar redirect berjalan mulus
+      }
     } else {
       document.body.classList.remove('admin');
       if (adminBadge) adminBadge.style.display = 'none';
