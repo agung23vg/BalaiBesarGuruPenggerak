@@ -2,21 +2,105 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin - BBGP Parung</title>
-  <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="bbgp.png" type="image/x-icon">
   <style>
-    .admin-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
-    .admin-table th, .admin-table td { border: 1px solid #ccc; padding: 8px; }
-    .admin-table th { background: #f3f4f6; }
-    .edit-btn, .delete-btn, .save-btn, .cancel-btn {
-      padding: 4px 10px; margin: 0 2px; border: none; border-radius: 4px; cursor: pointer;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
     }
-    .edit-btn { background: #2563eb; color: #fff; }
-    .delete-btn { background: #dc2626; color: #fff; }
-    .save-btn { background: #059669; color: #fff; }
-    .cancel-btn { background: #6b7280; color: #fff; }
-    .admin-header { margin-top: 2rem; }
+
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 1rem;
+    }
+
+    .header-flex {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 1rem;
+    }
+
+    .header-title-group h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .header-title-group p {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .admin-header {
+      padding: 1rem;
+      background-color: #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h2 {
+      margin: 0;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .admin-table th, .admin-table td {
+      border: 1px solid #d1d5db;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .admin-table th {
+      background-color: #f3f4f6;
+    }
+
+    .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+      padding: 6px 12px;
+      margin: 2px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .edit-btn { background-color: #2563eb; color: white; }
+    .delete-btn { background-color: #dc2626; color: white; }
+    .save-btn { background-color: #059669; color: white; }
+    .cancel-btn { background-color: #6b7280; color: white; }
+
+    button[onclick="logout()"] {
+      background-color: #1f2937;
+      color: white;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .admin-table, .admin-header {
+        font-size: 0.9rem;
+      }
+      .header-title-group h1 {
+        font-size: 1.2rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -31,8 +115,8 @@
   </header>
 
   <div class="admin-header">
-    <button onclick="logout()" style="float:right;">Logout</button>
     <h2>Daftar Booking Lapangan</h2>
+    <button onclick="logout()">Logout</button>
   </div>
 
   <div id="admin-booking-container">
@@ -56,92 +140,87 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Konfigurasi Supabase
-    const supabaseUrl = 'https://eiqkjwjbpbhjieijtjad.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = window.supabase.createClient(
+      'https://eiqkjwjbpbhjieijtjad.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI'
+    );
 
     let booking = [];
     let editingId = null;
 
-    // Ambil data booking
     async function fetchAdminBookings() {
       const { data, error } = await supabase
         .from('booking')
         .select('*')
         .order('date', { ascending: true });
+
       if (error) {
         alert('Gagal mengambil data booking');
         return;
       }
+
       booking = data || [];
       renderAdminBookings();
     }
 
-    // Render tabel booking
     function renderAdminBookings() {
       const tbody = document.querySelector('#admin-booking-table tbody');
       tbody.innerHTML = '';
       if (booking.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data booking</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7">Belum ada data booking</td></tr>';
         return;
       }
-      booking.forEach(booking => {
-        if (editingId === booking.id) {
-          // Mode edit
+
+      booking.forEach(b => {
+        if (editingId === b.id) {
           tbody.innerHTML += `
             <tr>
-              <td><input type="text" id="edit-nama" value="${booking.nama || ''}"></td>
-              <td><input type="text" id="edit-field" value="${booking.field || ''}"></td>
-              <td><input type="date" id="edit-date" value="${booking.date || ''}"></td>
-              <td><input type="text" id="edit-time" value="${booking.time || ''}"></td>
-              <td><input type="number" id="edit-duration" value="${booking.duration || 1}" min="1" max="12"></td>
+              <td><input type="text" id="edit-nama" value="${b.nama || ''}"></td>
+              <td><input type="text" id="edit-field" value="${b.field || ''}"></td>
+              <td><input type="date" id="edit-date" value="${b.date || ''}"></td>
+              <td><input type="text" id="edit-time" value="${b.time || ''}"></td>
+              <td><input type="number" id="edit-duration" value="${b.duration || 1}" min="1" max="12"></td>
               <td>
                 <select id="edit-status">
-                  <option value="Menunggu Konfirmasi" ${booking.status === 'Menunggu Konfirmasi' ? 'selected' : ''}>Menunggu Konfirmasi</option>
-                  <option value="Dikonfirmasi" ${booking.status === 'Dikonfirmasi' ? 'selected' : ''}>Dikonfirmasi</option>
-                  <option value="Selesai" ${booking.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
-                  <option value="Dibatalkan" ${booking.status === 'Dibatalkan' ? 'selected' : ''}>Dibatalkan</option>
+                  <option value="Menunggu Konfirmasi" ${b.status === 'Menunggu Konfirmasi' ? 'selected' : ''}>Menunggu Konfirmasi</option>
+                  <option value="Dikonfirmasi" ${b.status === 'Dikonfirmasi' ? 'selected' : ''}>Dikonfirmasi</option>
+                  <option value="Selesai" ${b.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                  <option value="Dibatalkan" ${b.status === 'Dibatalkan' ? 'selected' : ''}>Dibatalkan</option>
                 </select>
               </td>
               <td>
-                <button class="save-btn" onclick="saveEdit(${booking.id})">Simpan</button>
+                <button class="save-btn" onclick="saveEdit('${b.id}')">Simpan</button>
                 <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
               </td>
-            </tr>
-          `;
+            </tr>`;
         } else {
           tbody.innerHTML += `
             <tr>
-              <td>${booking.nama || ''}</td>
-              <td>${booking.field || ''}</td>
-              <td>${booking.date || ''}</td>
-              <td>${booking.time || ''}</td>
-              <td>${booking.duration || ''} jam</td>
-              <td>${booking.status || ''}</td>
+              <td>${b.nama || ''}</td>
+              <td>${b.field || ''}</td>
+              <td>${b.date || ''}</td>
+              <td>${b.time || ''}</td>
+              <td>${b.duration || ''} jam</td>
+              <td>${b.status || ''}</td>
               <td>
-                <button class="edit-btn" onclick="editBooking(${booking.id})">Edit</button>
-                <button class="delete-btn" onclick="deleteBooking(${booking.id})">Hapus</button>
+                <button class="edit-btn" onclick="editBooking('${b.id}')">Edit</button>
+                <button class="delete-btn" onclick="deleteBooking('${b.id}')">Hapus</button>
               </td>
-            </tr>
-          `;
+            </tr>`;
         }
       });
     }
 
-    // Edit booking
     window.editBooking = function(id) {
       editingId = id;
       renderAdminBookings();
     };
 
-    // Batal edit
     window.cancelEdit = function() {
       editingId = null;
       renderAdminBookings();
     };
 
-    // Simpan edit booking
     window.saveEdit = async function(id) {
       const nama = document.getElementById('edit-nama').value;
       const field = document.getElementById('edit-field').value;
@@ -154,23 +233,19 @@
         .from('booking')
         .update({ nama, field, date, time, duration, status })
         .eq('id', id);
-      
-     if (error) {
-  alert('Gagal mengedit booking: ' + error.message);
-  console.error(error);
-  return;
-}
+
+      if (error) {
+        alert('Gagal mengedit booking: ' + error.message);
+        return;
+      }
+
       editingId = null;
       await fetchAdminBookings();
     };
 
-    // Hapus booking
     window.deleteBooking = async function(id) {
       if (!confirm('Yakin ingin menghapus booking ini?')) return;
-      const { error } = await supabase
-        .from('booking')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('booking').delete().eq('id', id);
       if (error) {
         alert('Gagal menghapus booking');
         return;
@@ -178,23 +253,19 @@
       await fetchAdminBookings();
     };
 
-    // Logout
     window.logout = async function() {
       await supabase.auth.signOut();
       window.location.href = 'login.html';
     };
 
-    // Cek login admin
     async function checkAdmin() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user || user.email !== "bbgpparung@gmail.com") {
+      if (!user || user.email !== 'bbgpparung@gmail.com') {
         alert('Anda bukan admin!');
         window.location.href = 'login.html';
-        return;
       }
     }
 
-    // On load
     window.onload = async function() {
       await checkAdmin();
       await fetchAdminBookings();
