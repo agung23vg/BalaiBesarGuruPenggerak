@@ -45,6 +45,7 @@
           <th>Jam</th>
           <th>Durasi</th>
           <th>Status</th>
+          <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -81,7 +82,7 @@
     function renderAdminBookings() {
       const tbody = document.querySelector('#admin-booking-table tbody');
       tbody.innerHTML = '';
-      if (bookings.length === 0) {
+      if (booking.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data booking</td></tr>';
         return;
       }
@@ -154,12 +155,11 @@
         .update({ nama, field, date, time, duration, status })
         .eq('id', id);
       
-      if (error) {
-  alert('Gagal menghapus booking: ' + error.message);
-  console.error(error); // Tambahan untuk melihat error detail di console
+     if (error) {
+  alert('Gagal mengedit booking: ' + error.message);
+  console.error(error);
   return;
 }
-
       editingId = null;
       await fetchAdminBookings();
     };
