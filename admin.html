@@ -60,7 +60,7 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    let bookings = [];
+    let booking = [];
     let editingId = null;
 
     // Ambil data booking
@@ -73,7 +73,7 @@
         alert('Gagal mengambil data booking');
         return;
       }
-      bookings = data || [];
+      booking = data || [];
       renderAdminBookings();
     }
 
@@ -85,7 +85,7 @@
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data booking</td></tr>';
         return;
       }
-      bookings.forEach(booking => {
+      booking.forEach(booking => {
         if (editingId === booking.id) {
           // Mode edit
           tbody.innerHTML += `
@@ -153,11 +153,13 @@
         .from('booking')
         .update({ nama, field, date, time, duration, status })
         .eq('id', id);
-
+      
       if (error) {
-        alert('Gagal mengupdate data booking');
-        return;
-      }
+  alert('Gagal menghapus booking: ' + error.message);
+  console.error(error); // Tambahan untuk melihat error detail di console
+  return;
+}
+
       editingId = null;
       await fetchAdminBookings();
     };
