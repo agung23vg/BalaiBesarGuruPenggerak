@@ -6,6 +6,10 @@
   <title>Dashboard Admin - BBGP Parung</title>
   <link rel="icon" href="bbgp.png" type="image/x-icon">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #f9fafb;
@@ -45,13 +49,25 @@
       padding: 1rem;
       background-color: #e5e7eb;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
     }
 
     .admin-header h2 {
-      margin: 0;
+      margin: 0.5rem 0;
+      font-size: 1.3rem;
+    }
+
+    .logout-btn {
+      background-color: #1f2937;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin: 0.5rem 0;
     }
 
     .admin-table {
@@ -61,14 +77,14 @@
       background-color: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       overflow-x: auto;
-      display: block;
     }
 
-    .admin-table th, .admin-table td {
+    .admin-table th,
+    .admin-table td {
       border: 1px solid #d1d5db;
-      padding: 10px;
+      padding: 8px 10px;
       text-align: center;
-      white-space: nowrap;
+      font-size: 0.95rem;
     }
 
     .admin-table th {
@@ -76,12 +92,12 @@
     }
 
     .edit-btn, .delete-btn, .save-btn, .cancel-btn {
-      padding: 6px 12px;
+      padding: 6px 10px;
       margin: 2px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .edit-btn { background-color: #2563eb; color: white; }
@@ -89,39 +105,37 @@
     .save-btn { background-color: #059669; color: white; }
     .cancel-btn { background-color: #6b7280; color: white; }
 
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    button[onclick="logout()"] {
-      background-color: #1f2937;
-      color: white;
-      padding: 6px 14px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    /* Responsive Table Container */
+    #admin-booking-container {
+      overflow-x: auto;
+      padding: 0 1rem;
     }
 
     @media (max-width: 768px) {
-      .admin-table, .admin-header {
-        font-size: 0.9rem;
-      }
       .header-title-group h1 {
         font-size: 1.2rem;
       }
-      .action-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+
+      .header-title-group p {
+        font-size: 0.9rem;
       }
-      .edit-btn, .delete-btn, .save-btn, .cancel-btn {
-        font-size: 12px;
-        padding: 5px 10px;
+
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
-      .header-logo {
-        margin-bottom: 0.5rem;
+
+      .admin-header h2 {
+        font-size: 1.1rem;
+      }
+
+      .logout-btn {
+        align-self: flex-end;
+      }
+
+      .admin-table th, .admin-table td {
+        font-size: 0.85rem;
+        padding: 6px;
       }
     }
   </style>
