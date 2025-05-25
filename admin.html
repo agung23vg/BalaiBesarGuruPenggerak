@@ -5,148 +5,162 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Admin - BBGP Parung</title>
   <link rel="icon" href="bbgp.png" type="image/x-icon" />
-   <link a href="bbgp.png" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9fafb;
       margin: 0;
       padding: 0;
       background-image: url('bbgp.png');
-      background-size: cover;       /* Gambar memenuhi seluruh halaman */
-      background-repeat: no-repeat; /* Gambar tidak mengulang */
-      background-position: center;  /* Gambar di tengah */
-
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 100vh;
+      position: relative;
+      z-index: 0;
     }
-
+    /* Overlay agar gambar tidak terlalu sepi/flat */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(30,58,138,0.30) 0%, rgba(255,255,255,0.18) 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
     header {
       background-color: #1e3a8a;
       color: white;
-      padding: 1rem 0;
+      padding: 1.2rem 0 0.7rem 0;
+      box-shadow: 0 2px 8px rgba(30,58,138,0.06);
     }
-
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
     }
-
     .header-flex {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
     }
-
     .header-logo {
-      width: 50px;
-      height: 50px;
-      margin-right: 1rem;
+      width: 56px;
+      height: 56px;
+      margin-right: 1.2rem;
+      object-fit: contain;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: #f3f4f6;
+      box-shadow: 0 2px 6px rgba(30,58,138,0.07);
     }
-
     .header-title-group h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.7rem;
+      letter-spacing: 1px;
     }
-
     .header-title-group p {
       margin: 0;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      opacity: 0.92;
     }
-
+    .ornamen-bawah-header {
+      display: flex;
+      justify-content: center;
+      margin: 18px 0 10px 0;
+    }
+    .ornamen-bawah-header img {
+      width: 100px;
+      opacity: 0.82;
+      filter: drop-shadow(0 2px 8px rgba(30,58,138,0.11));
+    }
     .admin-header {
       background-color: #e5e7eb;
-      padding: 1rem 0;
+      padding: 1.1rem 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+      margin-top: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(30,58,138,0.07);
     }
-
-    .admin-header h2 {
-      margin: 0;
-    }
-
+    .admin-header h2 { margin: 0; font-size: 1.2rem; }
     .logout-btn {
       background-color: #1f2937;
       color: white;
-      padding: 6px 14px;
+      padding: 8px 18px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       margin-top: 0.5rem;
+      font-size: 1rem;
+      transition: background 0.18s;
     }
-
+    .logout-btn:hover {
+      background-color: #374151;
+    }
     .table-wrapper {
       overflow-x: auto;
-      margin-top: 1rem;
+      margin-top: 1.3rem;
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(30,58,138,0.08);
+      padding-bottom: 1.2rem;
     }
-
     .admin-table {
       width: 100%;
       border-collapse: collapse;
       background-color: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
     }
-
     .admin-table th, .admin-table td {
       border: 1px solid #d1d5db;
-      padding: 10px;
+      padding: 12px 10px;
       text-align: center;
       white-space: nowrap;
     }
-
     .admin-table th {
       background-color: #f3f4f6;
+      font-weight: 600;
     }
-
     .edit-btn, .delete-btn, .save-btn, .cancel-btn {
       padding: 6px 12px;
       margin: 2px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.97rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.18s;
     }
-
     .edit-btn { background-color: #2563eb; color: white; }
+    .edit-btn:hover { background-color: #1d4ed8; }
     .delete-btn { background-color: #dc2626; color: white; }
+    .delete-btn:hover { background-color: #b91c1c; }
     .save-btn { background-color: #059669; color: white; }
+    .save-btn:hover { background-color: #047857; }
     .cancel-btn { background-color: #6b7280; color: white; }
-
+    .cancel-btn:hover { background-color: #4b5563; }
     .action-buttons {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-
     @media (max-width: 768px) {
-      .header-title-group h1 {
-        font-size: 1.2rem;
-      }
-
-      .admin-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .logout-btn {
-        margin-top: 1rem;
-      }
-
-      .action-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
+      .header-title-group h1 { font-size: 1.2rem; }
+      .admin-header { flex-direction: column; align-items: flex-start; }
+      .logout-btn { margin-top: 1rem; }
+      .action-buttons { flex-direction: row; flex-wrap: wrap; justify-content: center; }
       .edit-btn, .delete-btn, .save-btn, .cancel-btn {
         font-size: 12px;
         padding: 5px 10px;
       }
+      .ornamen-bawah-header img { width: 60px; }
     }
   </style>
 </head>
@@ -160,12 +174,13 @@
       </div>
     </div>
   </header>
-
+  <div class="ornamen-bawah-header">
+    <img src="bbgp.png" alt="Ornamen BBGP" />
+  </div>
   <div class="container admin-header">
     <h2>Daftar Booking Lapangan</h2>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
-
   <div class="container table-wrapper">
     <table class="admin-table" id="admin-booking-table">
       <thead>
@@ -184,33 +199,26 @@
       </tbody>
     </table>
   </div>
-
-  <!-- Supabase & Script tetap -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const supabase = window.supabase.createClient(
       'https://eiqkjwjbpbhjieijtjad.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI'
     );
-
     let booking = [];
     let editingId = null;
-
     async function fetchAdminBookings() {
       const { data, error } = await supabase
         .from('booking')
         .select('*')
         .order('date', { ascending: true });
-
       if (error) {
         alert('Gagal mengambil data booking');
         return;
       }
-
       booking = data || [];
       renderAdminBookings();
     }
-
     function renderAdminBookings() {
       const tbody = document.querySelector('#admin-booking-table tbody');
       tbody.innerHTML = '';
@@ -218,7 +226,6 @@
         tbody.innerHTML = '<tr><td colspan="7">Belum ada data booking</td></tr>';
         return;
       }
-
       booking.forEach(b => {
         if (editingId === b.id) {
           tbody.innerHTML += `
@@ -238,8 +245,8 @@
               </td>
               <td>
                 <div class="action-buttons">
-                  <button class="save-btn" onclick="saveEdit('${b.id}')">Simpan</button>
-                  <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
+                  <button class="save-btn" onclick="saveEdit('${b.id}')">💾 Simpan</button>
+                  <button class="cancel-btn" onclick="cancelEdit()">❎ Batal</button>
                 </div>
               </td>
             </tr>`;
@@ -254,25 +261,22 @@
               <td>${b.status || ''}</td>
               <td>
                 <div class="action-buttons">
-                  <button class="edit-btn" onclick="editBooking('${b.id}')">Edit</button>
-                  <button class="delete-btn" onclick="deleteBooking('${b.id}')">Hapus</button>
+                  <button class="edit-btn" onclick="editBooking('${b.id}')">✏️ Edit</button>
+                  <button class="delete-btn" onclick="deleteBooking('${b.id}')">🗑️ Hapus</button>
                 </div>
               </td>
             </tr>`;
         }
       });
     }
-
     window.editBooking = function(id) {
       editingId = id;
       renderAdminBookings();
     };
-
     window.cancelEdit = function() {
       editingId = null;
       renderAdminBookings();
     };
-
     window.saveEdit = async function(id) {
       const nama = document.getElementById('edit-nama').value;
       const field = document.getElementById('edit-field').value;
@@ -280,21 +284,17 @@
       const time = document.getElementById('edit-time').value;
       const duration = parseInt(document.getElementById('edit-duration').value);
       const status = document.getElementById('edit-status').value;
-
       const { error } = await supabase
         .from('booking')
         .update({ nama, field, date, time, duration, status })
         .eq('id', id);
-
       if (error) {
         alert('Gagal mengedit booking: ' + error.message);
         return;
       }
-
       editingId = null;
       await fetchAdminBookings();
     };
-
     window.deleteBooking = async function(id) {
       if (!confirm('Yakin ingin menghapus booking ini?')) return;
       const { error } = await supabase.from('booking').delete().eq('id', id);
@@ -304,12 +304,10 @@
       }
       await fetchAdminBookings();
     };
-
     window.logout = async function() {
       await supabase.auth.signOut();
       window.location.href = 'login.html';
     };
-
     async function checkAdmin() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || user.email !== 'bbgpparung@gmail.com') {
@@ -317,7 +315,6 @@
         window.location.href = 'login.html';
       }
     }
-
     window.onload = async function() {
       await checkAdmin();
       await fetchAdminBookings();
