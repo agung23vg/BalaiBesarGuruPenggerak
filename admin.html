@@ -22,6 +22,7 @@
     .header-flex {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .header-logo {
@@ -46,6 +47,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .admin-header h2 {
@@ -55,15 +57,18 @@
     .admin-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1rem;
+      margin: 1rem 0;
       background-color: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow-x: auto;
+      display: block;
     }
 
     .admin-table th, .admin-table td {
       border: 1px solid #d1d5db;
       padding: 10px;
       text-align: center;
+      white-space: nowrap;
     }
 
     .admin-table th {
@@ -84,6 +89,12 @@
     .save-btn { background-color: #059669; color: white; }
     .cancel-btn { background-color: #6b7280; color: white; }
 
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     button[onclick="logout()"] {
       background-color: #1f2937;
       color: white;
@@ -99,6 +110,18 @@
       }
       .header-title-group h1 {
         font-size: 1.2rem;
+      }
+      .action-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+        font-size: 12px;
+        padding: 5px 10px;
+      }
+      .header-logo {
+        margin-bottom: 0.5rem;
       }
     }
   </style>
@@ -189,8 +212,10 @@
                 </select>
               </td>
               <td>
-                <button class="save-btn" onclick="saveEdit('${b.id}')">Simpan</button>
-                <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
+                <div class="action-buttons">
+                  <button class="save-btn" onclick="saveEdit('${b.id}')">Simpan</button>
+                  <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
+                </div>
               </td>
             </tr>`;
         } else {
@@ -203,8 +228,10 @@
               <td>${b.duration || ''} jam</td>
               <td>${b.status || ''}</td>
               <td>
-                <button class="edit-btn" onclick="editBooking('${b.id}')">Edit</button>
-                <button class="delete-btn" onclick="deleteBooking('${b.id}')">Hapus</button>
+                <div class="action-buttons">
+                  <button class="edit-btn" onclick="editBooking('${b.id}')">Edit</button>
+                  <button class="delete-btn" onclick="deleteBooking('${b.id}')">Hapus</button>
+                </div>
               </td>
             </tr>`;
         }
