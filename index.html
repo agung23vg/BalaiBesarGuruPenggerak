@@ -175,36 +175,37 @@
   </section>
 
   <!-- Modal Booking -->
-  <div id="booking-modal" style="display:none;">
-    <div class="modal-content">
-      <span class="close" onclick="closeBookingModal()">&times;</span>
-      <h2 id="modal-title">Pesan Lapangan</h2>
-      <form id="booking-form" onsubmit="submitBooking(event)">
-        <input type="hidden" id="field-type" name="fieldType">
-        <div class="form-group">
-          <label for="booking-date">Tanggal</label>
-          <input type="date" id="booking-date" name="date" required>
-        </div>
-        <div class="form-group">
-          <label for="booking-time">Jam</label>
-          <select id="booking-time" name="time" required>
-            <option value="">Pilih Jam</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="booking-duration">Durasi (jam)</label>
-          <select id="booking-duration" name="duration" required>
-            <option value="">Pilih Durasi</option>
-            <option value="1">1 Jam</option>
-            <option value="2">2 Jam</option>
-            <option value="3">3 Jam</option>
-          </select>
-        </div>
-        <button type="submit" class="submit-btn">Pesan Sekarang</button>
-      </form>
-    </div>
+<!-- Modal Booking -->
+<div id="booking-modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeBookingModal()">&times;</span>
+    <h2 id="modal-title">Pesan Lapangan</h2>
+    <form id="booking-form" onsubmit="submitBooking(event)">
+      <input type="hidden" id="field-type" name="fieldType">
+      <div class="form-group">
+        <label for="booking-date">Tanggal</label>
+        <input type="date" id="booking-date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label>Jam</label>
+        <!-- Ganti select menjadi kontainer slot -->
+        <div id="slot-container" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+        <input type="hidden" id="booking-time" name="time" required>
+      </div>
+      <div class="form-group">
+        <label for="booking-duration">Durasi (jam)</label>
+        <select id="booking-duration" name="duration" required>
+          <option value="">Pilih Durasi</option>
+          <option value="1">1 Jam</option>
+          <option value="2">2 Jam</option>
+          <option value="3">3 Jam</option>
+        </select>
+      </div>
+      <button type="submit" class="submit-btn">Pesan Sekarang</button>
+    </form>
   </div>
-
+</div>
+  
   <!-- Footer -->
   <footer>
     <p>&copy; 2025 Balai Guru Penggerak - Booking Lapangan Olahraga</p>
