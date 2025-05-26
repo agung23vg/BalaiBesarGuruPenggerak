@@ -1,3 +1,4 @@
+// --- Konfigurasi Supabase ---
 const supabaseUrl = 'https://eiqkjwjbpbhjieijtjad.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpcWtqd2picGJoamllaWp0amFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMzQzMjAsImV4cCI6MjA2MjgxMDMyMH0.-MPUvR5OePkNkq2NCoNY5ecFNNaLJLm7K4mMFnoKBWI';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -5,14 +6,15 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 const ADMIN_EMAIL = "bbgpparung@gmail.com";
 const ADMIN_WA_NUMBER = '6288223881917';
 let bookings = [];
+let selectedSlot = null;
 
-// Toggle mobile menu
+// --- Toggle mobile menu ---
 function toggleMenu() {
   const navLinks = document.getElementById('navLinks');
   navLinks.classList.toggle('active');
 }
 
-// Cek login sebelum booking
+// --- Cek login sebelum booking ---
 async function handleBookingClick(fieldType) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -24,7 +26,7 @@ async function handleBookingClick(fieldType) {
   openBookingModal(fieldType);
 }
 
-// Cek role user & tampilkan badge admin
+// --- Cek role user & tampilkan badge admin ---
 async function checkUserRole() {
   const { data: { user } } = await supabase.auth.getUser();
   const adminBadge = document.getElementById('admin-badge');
@@ -34,10 +36,9 @@ async function checkUserRole() {
     if (user.email === ADMIN_EMAIL) {
       document.body.classList.add('admin');
       if (adminBadge) adminBadge.style.display = 'inline-block';
-      // Redirect admin ke admin.html jika belum di halaman itu
       if (!window.location.pathname.endsWith('admin.html')) {
         window.location.href = 'admin.html';
-        return; // Stop eksekusi agar redirect berjalan mulus
+        return;
       }
     } else {
       document.body.classList.remove('admin');
@@ -51,44 +52,79 @@ async function checkUserRole() {
   }
 }
 
-// Open booking modal
+// --- Modal Booking ---
 function openBookingModal(fieldType) {
   document.getElementById('modal-title').innerText = `Pesan ${fieldType}`;
   document.getElementById('field-type').value = fieldType;
   document.getElementById('booking-modal').style.display = 'block';
-  populateTimeOptions(fieldType);
+  document.getElementById('slot-container').innerHTML = '';
+  document.getElementById('booking-time').value = '';
+  selectedSlot = null;
+
+  // Event handler: generate slot setelah tanggal dipilih
+  document.getElementById('booking-date').onchange = function() {
+    renderBookingSlots(fieldType, this.value);
+  };
 }
 
-// Close booking modal
+// --- Render slot jam booking ---
+async function renderBookingSlots(fieldType, date) {
+  if (!date) return;
+  let startHour = 8, endHour = 22;
+  if (fieldType === 'Lapangan Mini Soccer') endHour = 23;
+  if (fieldType === 'Lapangan Tenis') { startHour = 6; endHour = 21; }
+
+  // Ambil data booking dari Supabase
+  const { data, error } = await supabase
+    .from('booking')
+    .select('time, duration')
+    .eq('date', date)
+    .eq('field', fieldType);
+
+  const booked = {};
+  (data || []).forEach(b => {
+    let jamMulai = parseInt(b.time.split(':')[0], 10);
+    let durasi = parseInt(b.duration, 10);
+    for (let i = 0; i < durasi; i++) {
+      booked[jamMulai + i] = true;
+    }
+  });
+
+  // Render tombol slot
+  const slotContainer = document.getElementById('slot-container');
+  slotContainer.innerHTML = '';
+  for (let h = startHour; h <= endHour; h++) {
+    const jamStr = h.toString().padStart(2, '0') + ':00';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = jamStr;
+    btn.style.minWidth = '70px';
+    btn.style.padding = '8px 0';
+    btn.style.margin = '3px';
+    btn.style.borderRadius = '6px';
+    btn.style.border = '1px solid #ccc';
+    btn.style.background = booked[h] ? '#f87171' : '#4ade80';
+    btn.style.color = booked[h] ? '#fff' : '#222';
+    btn.disabled = !!booked[h];
+    btn.onclick = function() {
+      slotContainer.querySelectorAll('button').forEach(b => b.style.outline = '');
+      btn.style.outline = '2px solid #2563eb';
+      selectedSlot = jamStr;
+      document.getElementById('booking-time').value = jamStr;
+    };
+    slotContainer.appendChild(btn);
+  }
+}
+
+// --- Tutup modal booking ---
 function closeBookingModal() {
   document.getElementById('booking-modal').style.display = 'none';
   document.getElementById('booking-form').reset();
+  document.getElementById('slot-container').innerHTML = '';
+  selectedSlot = null;
 }
 
-// Populate time options
-function populateTimeOptions(fieldType) {
-  const timeSelect = document.getElementById('booking-time');
-  timeSelect.innerHTML = '<option value="">Pilih Jam</option>';
-  let startHour, endHour;
-  if (fieldType === 'Lapangan Voli') {
-    startHour = 8; endHour = 22;
-  } else if (fieldType === 'Lapangan Mini Soccer') {
-    startHour = 8; endHour = 23;
-  } else if (fieldType === 'Lapangan Tenis') {
-    startHour = 6; endHour = 21;
-  } else {
-    startHour = 8; endHour = 20;
-  }
-  for (let hour = startHour; hour <= endHour; hour++) {
-    const hourString = hour.toString().padStart(2, '0') + ':00';
-    const option = document.createElement('option');
-    option.value = hourString;
-    option.textContent = hourString;
-    timeSelect.appendChild(option);
-  }
-}
-
-// Calculate end time
+// --- Hitung jam selesai ---
 function calculateEndTime(startTime, duration) {
   const [hours, minutes] = startTime.split(':').map(Number);
   let newHour = hours + duration;
@@ -96,7 +132,7 @@ function calculateEndTime(startTime, duration) {
   return `${String(newHour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 }
 
-// Modal Cek Ketersediaan
+// --- Modal Cek Ketersediaan (opsional, tidak diubah) ---
 function openAvailabilityModal() {
   document.getElementById('availability-modal').style.display = 'block';
 }
@@ -106,7 +142,7 @@ function closeAvailabilityModal() {
   document.getElementById('availability-result').innerHTML = '';
 }
 
-// Cek ketersediaan
+// --- Cek ketersediaan (opsional, tidak diubah) ---
 async function checkAvailability(event) {
   event.preventDefault();
   const date = document.getElementById('availability-date').value;
@@ -150,9 +186,13 @@ async function checkAvailability(event) {
   document.getElementById('availability-result').innerHTML = html;
 }
 
-// Submit booking form
+// --- Submit booking ---
 async function submitBooking(event) {
   event.preventDefault();
+  if (!document.getElementById('booking-time').value) {
+    alert('Pilih jam booking terlebih dahulu!');
+    return;
+  }
   try {
     const field = document.getElementById('field-type').value.trim();
     const date = document.getElementById('booking-date').value;
@@ -234,12 +274,11 @@ async function submitBooking(event) {
   }
 }
 
-// Display bookings in table
+// --- Tampilkan bookings di tabel ---
 function displayBookings() {
   const tbody = document.querySelector('#booking-table tbody');
   const thead = document.querySelector('#booking-table thead tr');
   const isAdmin = document.body.classList.contains('admin');
-  // Set header kolom
   thead.innerHTML = `
     <th>Lapangan</th>
     <th>Tanggal</th>
@@ -268,7 +307,7 @@ function displayBookings() {
   });
 }
 
-// Fetch bookings from database
+// --- Ambil bookings dari database ---
 async function fetchBookings() {
   try {
     const { data, error } = await supabase
@@ -285,7 +324,7 @@ async function fetchBookings() {
   }
 }
 
-// Cancel booking (admin only)
+// --- Cancel booking (admin only) ---
 async function cancelBooking(id) {
   if (!confirm('Apakah Anda yakin ingin membatalkan pemesanan ini?')) {
     return;
@@ -305,7 +344,7 @@ async function cancelBooking(id) {
   }
 }
 
-// Logout
+// --- Logout ---
 async function logout() {
   await supabase.auth.signOut();
   document.getElementById('logout-nav').style.display = 'none';
@@ -315,7 +354,7 @@ async function logout() {
   alert('Logout berhasil');
 }
 
-// On page load
+// --- On page load ---
 window.onload = async function() {
   await checkUserRole();
   await fetchBookings();
