@@ -14,15 +14,8 @@ function toggleMenu() {
   navLinks.classList.toggle('active');
 }
 
-// --- Cek login sebelum booking ---
-async function handleBookingClick(fieldType) {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    if (confirm('Anda harus login/daftar dulu untuk booking. Daftar sekarang?')) {
-      window.location.href = 'login.html';
-    }
-    return;
-  }
+// --- Tombol Pesan Sekarang hanya buka modal booking, tidak cek login ---
+function handleBookingClick(fieldType) {
   openBookingModal(fieldType);
 }
 
@@ -186,26 +179,27 @@ async function checkAvailability(event) {
   document.getElementById('availability-result').innerHTML = html;
 }
 
-// --- Submit booking ---
+// --- Submit booking: cek login baru di sini ---
 async function submitBooking(event) {
   event.preventDefault();
   if (!document.getElementById('booking-time').value) {
     alert('Pilih jam booking terlebih dahulu!');
     return;
   }
+
+  // --- CEK LOGIN DI SINI, BUKAN SAAT BUKA MODAL ---
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert('Anda harus login untuk booking!');
+    window.location.href = 'login.html';
+    return;
+  }
+
   try {
     const field = document.getElementById('field-type').value.trim();
     const date = document.getElementById('booking-date').value;
     const time = document.getElementById('booking-time').value;
     const duration = parseInt(document.getElementById('booking-duration').value);
-
-    // Ambil user yang login
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      alert('Anda harus login untuk booking!');
-      window.location.href = 'login.html';
-      return;
-    }
 
     // Ambil profil user
     const { data: profile, error: profileError } = await supabase
