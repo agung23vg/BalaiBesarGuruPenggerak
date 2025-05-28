@@ -8,19 +8,19 @@
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #00FFFF 0%, #7FFFD4 100%);
+  background: linear-gradient(135deg, #7EC8E3 0%, #B3E0FF 100%);
   animation: gradienAnimasi 12s ease-in-out infinite alternate;
 }
 
 @keyframes gradienAnimasi {
   0% {
-    background: linear-gradient(135deg, #00FFFF 0%, #7FFFD4 100%);
+    background: linear-gradient(135deg, #7EC8E3 0%, #B3E0FF 100%);
   }
   50% {
     background: linear-gradient(135deg, #ddefff 0%, #FAEBD7 100%);
   }
   100% {
-    background: linear-gradient(135deg, #00FFFF 0%, #7FFFD4 100%);
+    background: linear-gradient(135deg, #7EC8E3 0%, #B3E0FF 100%);
   }
 }
 
@@ -415,7 +415,7 @@ header {
 
 /* Schedule */
 .schedule-container {
-  background-color: #ffe4e6;
+  background-color: #AEEEEE;
   border-radius: 12px;
   padding: 1.2rem 0.8rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
